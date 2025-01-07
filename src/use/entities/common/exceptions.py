@@ -1,4 +1,4 @@
-class DomainError(Exception):
+class EntityError(Exception):
     """Base class for exceptions in this module."""
 
     def __init__(self, message: str) -> None:
