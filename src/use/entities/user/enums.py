@@ -14,11 +14,14 @@ class RoleEnum(StrEnum):
     MODERATOR = auto()
     ADMIN = auto()
 
-    def validate_role(self, role_name: str) -> bool:
-        current_level = self.get_current_role().level
-        min_level = self.get_role_by_name(role_name).level
+    @classmethod
+    def validate_role(
+        cls, user_role: "RoleEnum", min_role: "RoleEnum"
+    ) -> bool:
+        user_role_level = cls.get_role_by_name(user_role).level
+        min_level = cls.get_role_by_name(min_role).level
 
-        return current_level >= min_level
+        return user_role_level >= min_level
 
     def get_current_role(self) -> RoleInfo:
         match self:
