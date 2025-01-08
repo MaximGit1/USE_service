@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+/database.db
+/serts/jwt-private.pem
+/serts/jwt-public.pem
+/conf/.secrets.baseline

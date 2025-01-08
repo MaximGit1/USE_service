@@ -22,4 +22,15 @@ cd USE_service
 cp .env.dist .env
 docker-compose up
 ```
+___
 
+## Project information
+
+### Migrations
+
+```
+alembic -c conf/alembic.ini revision --autogenerate -m ""
+```
+```
+alembic -c conf/alembic.ini upgrade head
+```

@@ -13,6 +13,12 @@ ruff = "^0.8.6"
 mypy = "^1.14.1"
 pytest = "^8.3.4"
 pytest-asyncio = "^0.25.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.36"}
+python-dotenv = "^1.0.1"
+alembic = "^1.14.0"
+aiosqlite = "^0.20.0"
+bcrypt = "^4.2.1"
+
 
 
 [build-system]
@@ -60,7 +66,7 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "S101", "COM812", "ISC001", "ANN401"]
+ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999"]
 
 [tool.ruff.format]
 docstring-code-format = true
