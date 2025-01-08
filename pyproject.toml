@@ -18,6 +18,9 @@ python-dotenv = "^1.0.1"
 alembic = "^1.14.0"
 aiosqlite = "^0.20.0"
 bcrypt = "^4.2.1"
+fastapi = "^0.115.6"
+dishka = "^1.4.2"
+uvicorn = "^0.34.0"
 
 
 
@@ -66,7 +69,7 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999"]
+ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999", "BLE001"]
 
 [tool.ruff.format]
 docstring-code-format = true
