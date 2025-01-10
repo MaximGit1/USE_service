@@ -51,10 +51,6 @@ def init_exc_handlers(app: "FastAPI") -> None:
         part(_validate, status=code.HTTP_409_CONFLICT),
     )
     app.add_exception_handler(
-        UserBannedError,
-        part(_validate, status=code.HTTP_409_CONFLICT),
-    )
-    app.add_exception_handler(
         InvalidTokenTypeError,
         part(_validate, status=code.HTTP_401_UNAUTHORIZED),
     )
