@@ -174,3 +174,5 @@ cython_debug/
 /serts/jwt-public.pem
 /conf/.secrets.baseline
 /src/use/database.db
+/certs/jwt-private.pem
+/certs/jwt-public.pem

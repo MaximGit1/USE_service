@@ -7,13 +7,14 @@ from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 
 from use.main.di.main import container_factory
+from use.presentation.auth.api_router import router as auth_router
 from use.presentation.common.exc_handlers import init_exc_handlers
 from use.presentation.common.middlewares.setup import init_middleware
 from use.presentation.user.api_router import router as user_router
 
 
 def init_routers(app: FastAPI) -> None:
-    routers = (user_router,)
+    routers = (user_router, auth_router)
 
     for router in routers:
         app.include_router(router)

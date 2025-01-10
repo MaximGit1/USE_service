@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+from use.application.auth.protocols import JWTManageProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.user.protocols import (
     PasswordHasherProtocol,
@@ -22,12 +23,14 @@ from use.application.user.protocols import (
     UserReadProtocol,
     UserUpdateProtocol,
 )
+from use.infrastructure.auth.repositories import AccessManagerRepository
 from use.infrastructure.user.repositories import (
     PasswordHasherRepository,
     UserCreateRepository,
     UserReadRepository,
     UserUpdateRepository,
 )
+from use.main.config import Config, create_config
 
 DBURI = NewType("DBURI", str)
 
@@ -91,6 +94,18 @@ def repository_provider() -> Provider:
         scope=Scope.REQUEST,
         provides=UserUpdateProtocol,
     )
+    provider.provide(
+        AccessManagerRepository,
+        scope=Scope.APP,
+        provides=JWTManageProtocol,
+    )
+
+    return provider
+
+
+def config_provider() -> Provider:
+    provider = Provider()
+    provider.provide(create_config, scope=Scope.APP, provides=Config)
 
     return provider
 
@@ -99,4 +114,5 @@ def get_adapters_providers() -> list[Provider]:
     return [
         DBProvider(),
         repository_provider(),
+        config_provider(),
     ]

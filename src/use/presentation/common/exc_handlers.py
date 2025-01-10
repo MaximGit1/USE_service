@@ -4,6 +4,10 @@ from typing import TYPE_CHECKING, cast
 from starlette import status as code
 from starlette.responses import JSONResponse
 
+from use.application.auth.exceptions import (
+    InvalidTokenTypeError,
+    TokenExpiredError,
+)
 from use.application.user.exceptions import (
     UserAlreadyExistsError,
     UserBannedError,
@@ -45,4 +49,16 @@ def init_exc_handlers(app: "FastAPI") -> None:
     app.add_exception_handler(
         UserBannedError,
         part(_validate, status=code.HTTP_409_CONFLICT),
+    )
+    app.add_exception_handler(
+        UserBannedError,
+        part(_validate, status=code.HTTP_409_CONFLICT),
+    )
+    app.add_exception_handler(
+        InvalidTokenTypeError,
+        part(_validate, status=code.HTTP_401_UNAUTHORIZED),
+    )
+    app.add_exception_handler(
+        TokenExpiredError,
+        part(_validate, status=code.HTTP_401_UNAUTHORIZED),
     )

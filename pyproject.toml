@@ -21,6 +21,7 @@ bcrypt = "^4.2.1"
 fastapi = "^0.115.6"
 dishka = "^1.4.2"
 uvicorn = "^0.34.0"
+pyjwt = {extras = ["crypto"], version = "^2.9.0"}
 
 
 
