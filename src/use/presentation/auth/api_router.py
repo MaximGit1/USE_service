@@ -1,9 +1,10 @@
 from typing import Annotated
 
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
 from use.application.auth.service import AuthService
+from use.application.cookie.service import CookieService
 from use.application.user.response.models import (
     UserIdResponse,
 )
@@ -31,12 +32,29 @@ async def login(
     user_data: Annotated[UserLoginInput, Depends()],
     user_service: FromDishka[UserService],
     auth_service: FromDishka[AuthService],
-) -> Token:
+    cookie_service: FromDishka[CookieService],
+    response: Response,
+) -> None:
     username, password = user_data.get_data()
     user_id = await user_service.authenticate_user(
         username=username, password=password
     )
-    return auth_service.login_user(user_id=user_id)
+    token = auth_service.login_user(user_id=user_id)
+
+    cookie_service.update_service(response=response)
+    cookie_service.set_access_token(token)
+
+
+@router.post(
+    "/logout/",
+    summary="Logout user",
+)
+async def logout(
+    response: Response,
+    cookie_service: FromDishka[CookieService],
+) -> None:
+    cookie_service.update_service(response=response)
+    cookie_service.delete_access_token()
 
 
 @router.post("/verify-role/")
@@ -52,7 +70,7 @@ async def verify_role(
 
 
 @router.post(
-    "/me/",
+    "/my-id/",
     summary="Get current user id",
 )
 async def get_current_user_id(
