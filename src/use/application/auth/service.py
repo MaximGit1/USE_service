@@ -28,3 +28,7 @@ class AuthService:
         if token_type == TokenTypes.RefreshToken:
             raise InvalidTokenTypeError(token_type=token_type)
         raise InvalidTokenTypeError(token_type=token_type)
+
+    def get_user_id_by_access_token(self, access_token: Token) -> int:
+        payload = self._access.parse_token(token=access_token)
+        return int(payload.sub)

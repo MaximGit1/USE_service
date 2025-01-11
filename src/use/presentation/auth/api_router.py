@@ -49,3 +49,16 @@ async def verify_role(
         user_id=user_id,
         required_role=role,
     )
+
+
+@router.post(
+    "/me/",
+    summary="Get current user id",
+)
+async def get_current_user_id(
+    auth_service: FromDishka[AuthService],
+    token: Token,
+) -> UserIdResponse:
+    return UserIdResponse(
+        user_id=auth_service.get_user_id_by_access_token(token)
+    )

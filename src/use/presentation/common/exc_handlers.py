@@ -6,6 +6,7 @@ from starlette.responses import JSONResponse
 
 from use.application.auth.exceptions import (
     InvalidTokenTypeError,
+    TokenBodyError,
     TokenExpiredError,
 )
 from use.application.user.exceptions import (
@@ -56,5 +57,9 @@ def init_exc_handlers(app: "FastAPI") -> None:
     )
     app.add_exception_handler(
         TokenExpiredError,
+        part(_validate, status=code.HTTP_401_UNAUTHORIZED),
+    )
+    app.add_exception_handler(
+        TokenBodyError,
         part(_validate, status=code.HTTP_401_UNAUTHORIZED),
     )

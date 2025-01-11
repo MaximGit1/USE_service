@@ -9,3 +9,8 @@ class InvalidTokenTypeError(ApplicationError):
 class TokenExpiredError(ApplicationError):
     def __init__(self) -> None:
         super().__init__("Token expired.")
+
+
+class TokenBodyError(ApplicationError):
+    def __init__(self) -> None:
+        super().__init__("The token body was broken.")
