@@ -29,6 +29,6 @@ class AuthService:
             raise InvalidTokenTypeError(token_type=token_type)
         raise InvalidTokenTypeError(token_type=token_type)
 
-    def get_user_id_by_access_token(self, access_token: Token) -> int:
-        payload = self._access.parse_token(token=access_token)
+    def get_user_id_by_access_token(self, access_token: str) -> int:
+        payload = self._access.parse_token(token=Token(access_token))
         return int(payload.sub)

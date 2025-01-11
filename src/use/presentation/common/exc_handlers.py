@@ -9,6 +9,7 @@ from use.application.auth.exceptions import (
     TokenBodyError,
     TokenExpiredError,
 )
+from use.application.cookie.exceptions import CookieIsNoneError
 from use.application.user.exceptions import (
     UserAlreadyExistsError,
     UserBannedError,
@@ -61,5 +62,9 @@ def init_exc_handlers(app: "FastAPI") -> None:
     )
     app.add_exception_handler(
         TokenBodyError,
+        part(_validate, status=code.HTTP_401_UNAUTHORIZED),
+    )
+    app.add_exception_handler(
+        CookieIsNoneError,
         part(_validate, status=code.HTTP_401_UNAUTHORIZED),
     )

@@ -70,7 +70,7 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999", "BLE001"]
+ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999", "BLE001", "PLR0913"]
 
 [tool.ruff.format]
 docstring-code-format = true
