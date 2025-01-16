@@ -1,7 +1,5 @@
-from typing import Annotated
-
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from use.application.user.request.models import (
     SearchFilters,
@@ -19,8 +17,8 @@ router = APIRouter(prefix="/users", tags=["Users"], route_class=DishkaRoute)
 @router.get("/")
 async def get_all(
     user_service: FromDishka[UserService],
-    pagination: Annotated[PaginationParams, Depends()],
-    filters: Annotated[SearchFilters, Depends()],
+    pagination: PaginationParams,
+    filters: SearchFilters,
 ) -> list[UserFullBodyResponse]:
     return await user_service.get_all(
         pagination=pagination.to_model(),

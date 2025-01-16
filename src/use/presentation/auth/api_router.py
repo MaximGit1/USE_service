@@ -1,7 +1,5 @@
-from typing import Annotated
-
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Request, Response
 
 from use.application.auth.service import AuthService
 from use.application.cookie.service import CookieService
@@ -18,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"], route_class=DishkaRoute)
 
 @router.post("/register/", status_code=201)
 async def create_user(
-    user_data: Annotated[UserCreateScheme, Depends()],
+    user_data: UserCreateScheme,
     user_service: FromDishka[UserService],
 ) -> UserIdResponse:
     username, password = user_data.get_data()
@@ -28,7 +26,7 @@ async def create_user(
 
 @router.post("/login/")
 async def login(
-    user_data: Annotated[UserLoginInput, Depends()],
+    user_data: UserLoginInput,
     user_service: FromDishka[UserService],
     auth_service: FromDishka[AuthService],
     cookie_service: FromDishka[CookieService],
