@@ -19,9 +19,10 @@ from use.entities.user.value_objects import UserID
     slots=True,
     kw_only=True,
 )
-class BaseTask(Entity[TaskID]):
+class Task(Entity[TaskID]):
     title: TaskTitle
     type: TaskTypeEnum
+    body: TaskBody
     answer: TaskAnswer
     time_limit: TaskTimeLimit
 
@@ -30,17 +31,8 @@ class BaseTask(Entity[TaskID]):
     slots=True,
     kw_only=True,
 )
-class Task4(Entity[TaskID]):
-    base_task_id: TaskID
-    body: TaskBody
-
-
-@dataclass(
-    slots=True,
-    kw_only=True,
-)
-class Task4Completed(Entity[TaskID]):
-    base_task_id: TaskID
+class TaskCompleted(Entity[TaskID]):
+    task_id: TaskID
     user_id: UserID
-    code_body: TaskCodeBody
-    response_time: TaskTimeLimit
+    code: TaskCodeBody
+    completed_time: TaskTimeLimit
