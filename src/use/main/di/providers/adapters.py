@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import (
 from use.application.auth.protocols import JWTManageProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
+from use.application.task.protocols import TaskCreateProtocol
 from use.application.user.protocols import (
     PasswordHasherProtocol,
     UserCreateProtocol,
@@ -28,6 +29,7 @@ from use.infrastructure.auth.repositories import AccessManagerRepository
 from use.infrastructure.cookie.repositories import (
     CookieAccessManagerRepository,
 )
+from use.infrastructure.task.repositories.add import TaskCreateRepository
 from use.infrastructure.user.repositories import (
     PasswordHasherRepository,
     UserCreateRepository,
@@ -107,6 +109,11 @@ def repository_provider() -> Provider:
         CookieAccessManagerRepository,
         scope=Scope.REQUEST,
         provides=CookieManagerInteractor,
+    )
+    provider.provide(
+        TaskCreateRepository,
+        scope=Scope.REQUEST,
+        provides=TaskCreateProtocol,
     )
 
     return provider

@@ -7,10 +7,12 @@ from sqlalchemy import (
     MetaData,
     String,
     Table,
+    Text,
     func,
 )
 from sqlalchemy.orm import registry
 
+from use.entities.task.models import Task, TaskCompleted
 from use.entities.user.models import User
 
 metadata = MetaData(
@@ -49,6 +51,56 @@ users_table = Table(
     ),
 )
 
+tasks_table = Table(
+    "tasks",
+    mapper_registry.metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("type", Integer, nullable=False),
+    Column("body", Text, nullable=False),
+    Column("answer", String, nullable=False),
+    Column("time_limit", Integer, nullable=False),
+    Column(
+        "created_at",
+        TIMESTAMP,
+        server_default=func.now(),
+        nullable=False,
+    ),
+    Column(
+        "updated_at",
+        TIMESTAMP,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    ),
+)
+
+completed_tasks_table = Table(
+    "completed_tasks",
+    mapper_registry.metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("task_id", Integer, nullable=False),
+    Column("user_id", Integer, nullable=False),
+    Column("code", String(555), nullable=False),
+    Column("completed_time", Integer, nullable=False),
+    Column(
+        "created_at",
+        TIMESTAMP,
+        server_default=func.now(),
+        nullable=False,
+    ),
+    Column(
+        "updated_at",
+        TIMESTAMP,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    ),
+)
+
 
 def map_tables() -> None:
     mapper_registry.map_imperatively(User, users_table)
+    mapper_registry.map_imperatively(Task, tasks_table)
+    mapper_registry.map_imperatively(TaskCompleted, completed_tasks_table)

@@ -172,3 +172,4 @@ cython_debug/
 /database.db
 /certs/jwt-private.pem
 /certs/jwt-public.pem
+/src/use/infrastructure/database/alembic/versions/

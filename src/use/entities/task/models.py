@@ -10,7 +10,6 @@ from use.entities.task.value_objects import (
     TaskCodeBody,
     TaskID,
     TaskTimeLimit,
-    TaskTitle,
 )
 from use.entities.user.value_objects import UserID
 
@@ -20,7 +19,6 @@ from use.entities.user.value_objects import UserID
     kw_only=True,
 )
 class Task(Entity[TaskID]):
-    title: TaskTitle
     type: TaskTypeEnum
     body: TaskBody
     answer: TaskAnswer

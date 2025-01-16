@@ -5,6 +5,7 @@ from dishka import (
 
 from use.application.auth.service import AuthService
 from use.application.cookie.service import CookieService
+from use.application.task.service import TaskService
 from use.application.user.service import UserService
 
 
@@ -13,6 +14,7 @@ def service_provider() -> Provider:
     provider.provide(UserService, scope=Scope.REQUEST)
     provider.provide(AuthService, scope=Scope.REQUEST)
     provider.provide(CookieService, scope=Scope.REQUEST)
+    provider.provide(TaskService, scope=Scope.REQUEST)
 
     return provider
 

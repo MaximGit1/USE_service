@@ -10,11 +10,12 @@ from use.main.di.main import container_factory
 from use.presentation.auth.api_router import router as auth_router
 from use.presentation.common.exc_handlers import init_exc_handlers
 from use.presentation.common.middlewares.setup import init_middleware
+from use.presentation.task.api_router import router as task_router
 from use.presentation.user.api_router import router as user_router
 
 
 def init_routers(app: FastAPI) -> None:
-    routers = (user_router, auth_router)
+    routers = (auth_router, user_router, task_router)
 
     for router in routers:
         app.include_router(router)
