@@ -3,6 +3,7 @@ from fastapi import APIRouter, Request, Response
 
 from use.application.auth.service import AuthService
 from use.application.cookie.service import CookieService
+from use.application.identityProvider.service import IdentityProvider
 from use.application.user.response.models import (
     UserIdResponse,
 )
@@ -55,23 +56,13 @@ async def logout(
 
 
 @router.post("/verify-role/")
-async def verify_role(
+async def verify_current_user_role(
     role: RoleEnum,
-    user_service: FromDishka[UserService],
-    cookie_service: FromDishka[CookieService],
-    auth_service: FromDishka[AuthService],
+    idp: FromDishka[IdentityProvider],
     request: Request,
-    user_id: int | None = None,
 ) -> bool:
-    if user_id is None:
-        cookie_service.update_service(request=request)
-        token = cookie_service.get_access_token()
-        user_id = auth_service.get_user_id_by_access_token(access_token=token)
-
-    return await user_service.verify_role(
-        user_id=user_id,
-        required_role=role,
-    )
+    idp.update_service(request=request)
+    return await idp.verify_role(required_role=role)
 
 
 @router.post(
@@ -79,13 +70,9 @@ async def verify_role(
     summary="Get current user id",
 )
 async def get_current_user_id(
-    auth_service: FromDishka[AuthService],
-    cookie_service: FromDishka[CookieService],
+    idp: FromDishka[IdentityProvider],
     request: Request,
 ) -> UserIdResponse:
-    cookie_service.update_service(request=request)
-    token = cookie_service.get_access_token()
+    idp.update_service(request=request)
 
-    return UserIdResponse(
-        user_id=auth_service.get_user_id_by_access_token(token)
-    )
+    return UserIdResponse(user_id=idp.get_current_user_id())
