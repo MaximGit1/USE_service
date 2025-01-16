@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from use.application.task.response.models import (
+from use.application.task.request.models import (
     TaskCompletedResponse,
     TaskResponse,
 )

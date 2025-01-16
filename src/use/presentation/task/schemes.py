@@ -3,7 +3,7 @@ from typing import Annotated
 from annotated_types import Ge, Lt, MaxLen, MinLen
 from pydantic import BaseModel
 
-from use.application.task.response.models import (
+from use.application.task.request.models import (
     TaskCompletedResponse,
     TaskResponse,
 )

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from use.application.task.protocols import TaskCreateProtocol
-from use.application.task.response.models import (
+from use.application.task.request.models import (
     TaskCompletedResponse,
     TaskResponse,
 )

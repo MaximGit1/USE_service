@@ -1,6 +1,6 @@
 from use.application.common.protocols import UoWProtocol
 from use.application.task.protocols import TaskCreateProtocol
-from use.application.task.response.models import (
+from use.application.task.request.models import (
     TaskCompletedResponse,
     TaskResponse,
 )
