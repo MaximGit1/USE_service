@@ -1,5 +1,6 @@
 from use.application.common.protocols import UoWProtocol
 from use.application.common.request.models import PaginationParams
+from use.application.task.exceptions import TaskNotFoundError
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
 from use.application.task.request.models import (
     SearchFilters,
@@ -10,6 +11,7 @@ from use.application.task.response.models import (
     TaskBodyResponse,
     TaskIDResponse,
 )
+from use.entities.task.models import Task
 from use.entities.task.value_objects import TaskID
 
 
@@ -42,12 +44,27 @@ class TaskService:
             pagination=pagination, filters=filters
         )
         return [
-            TaskBodyResponse(
-                id=task.id.value,
-                body=task.body.value,
-                type=task.type,
-                answer=None,
-                time_limit=task.time_limit.value,
-            )
+            self._convert_task_to_response_model(task=task, with_answer=False)
             for task in tasks
         ]
+
+    @staticmethod
+    def _convert_task_to_response_model(
+        task: Task, *, with_answer: bool
+    ) -> TaskBodyResponse:
+        return TaskBodyResponse(
+            id=task.id.value,
+            body=task.body.value,
+            type=task.type,
+            answer=task.answer.value if with_answer else None,
+            time_limit=task.time_limit.value,
+        )
+
+    async def get_task_by_id(self, task_id: int) -> TaskBodyResponse:
+        task = await self._read.get_task_by_id(task_id=TaskID(task_id))
+        if not task:
+            raise TaskNotFoundError
+
+        return self._convert_task_to_response_model(
+            task=task, with_answer=False
+        )

@@ -65,4 +65,10 @@ class TaskReadRepository(TaskReadProtocol):
         pass
 
     async def get_task_by_id(self, task_id: TaskID) -> Task | None:
-        pass
+        stmt = select(tasks_table).where(tasks_table.c.id == task_id.value)
+        result = (await self._session.execute(stmt)).one_or_none()
+
+        if result is None:
+            return None
+
+        return self._load_task(result)

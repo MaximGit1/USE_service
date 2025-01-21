@@ -10,12 +10,14 @@ from use.application.auth.exceptions import (
     TokenExpiredError,
 )
 from use.application.cookie.exceptions import CookieIsNoneError
+from use.application.task.exceptions import TaskNotFoundError
 from use.application.user.exceptions import (
     UserAlreadyExistsError,
     UserBannedError,
     UserInvalidCredentialsError,
     UserNotFoundError,
 )
+from use.entities.task.exceptions import TaskEntityValidationError
 from use.entities.user.exceptions import UserEntityValidationError
 
 if TYPE_CHECKING:
@@ -67,4 +69,12 @@ def init_exc_handlers(app: "FastAPI") -> None:
     app.add_exception_handler(
         CookieIsNoneError,
         part(_validate, status=code.HTTP_401_UNAUTHORIZED),
+    )
+    app.add_exception_handler(
+        TaskEntityValidationError,
+        part(_validate, status=code.HTTP_422_UNPROCESSABLE_ENTITY),
+    )
+    app.add_exception_handler(
+        TaskNotFoundError,
+        part(_validate, status=code.HTTP_404_NOT_FOUND),
     )
