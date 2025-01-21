@@ -31,3 +31,10 @@ class TaskCompletedResponse:
 
     def get_data(self) -> dict[str, Any]:
         return self.__dict__
+
+
+@dataclass
+class TaskRun:
+    code: str
+    time_limit: int
+    answer: str

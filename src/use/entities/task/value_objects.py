@@ -40,7 +40,7 @@ class TaskTimeLimit(ValueObject[int]):
         value = self.value
         time_limit = 120
 
-        if value < time_limit or value < 1:
+        if value > time_limit or value < 1:
             error_msg = (
                 "the task execution time must be "
                 "less than 120 seconds and not less than 1 second"

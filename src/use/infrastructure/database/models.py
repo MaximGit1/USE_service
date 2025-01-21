@@ -2,6 +2,7 @@ from sqlalchemy import (
     TIMESTAMP,
     Boolean,
     Column,
+    Float,
     Integer,
     LargeBinary,
     MetaData,
@@ -82,7 +83,7 @@ completed_tasks_table = Table(
     Column("task_id", Integer, nullable=False),
     Column("user_id", Integer, nullable=False),
     Column("code", String(555), nullable=False),
-    Column("completed_time", Integer, nullable=False),
+    Column("completed_time", Float, nullable=False),
     Column(
         "created_at",
         TIMESTAMP,
