@@ -4,11 +4,11 @@ from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, Depends
 
 from use.application.task.response.models import (
+    CompletedTaskBodyResponse,
     TaskBodyResponse,
     TaskIDResponse,
 )
 from use.application.task.service import TaskService
-from use.entities.task.value_objects import TaskID
 from use.presentation.common.schemes import PaginationParams
 from use.presentation.task.schemes import (
     SearchFiltersParams,
@@ -38,6 +38,17 @@ async def get_task_by_id(
     return await task_service.get_task_by_id(task_id=task_id)
 
 
+@router.get("/completed/{user_id}/{task_id}", response_model_exclude_none=True)
+async def get_completed_task_by_id(
+    user_id: int,
+    task_id: int,
+    task_service: FromDishka[TaskService],
+) -> CompletedTaskBodyResponse:
+    return await task_service.get_completed_task(
+        task_id=task_id, user_id=user_id
+    )
+
+
 @router.post("/create/base/", status_code=201)
 async def create_task(
     task_service: FromDishka[TaskService],
@@ -50,7 +61,7 @@ async def create_task(
 async def create_completed_task(
     task_service: FromDishka[TaskService],
     task_data: TaskCompletedCreateScheme,
-) -> TaskID:
+) -> TaskIDResponse:
     return await task_service.create_completed_task(
         task=task_data.get_response_model()
     )

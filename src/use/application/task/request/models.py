@@ -27,7 +27,7 @@ class TaskCompletedResponse:
     task_id: int
     user_id: int
     code: str
-    completed_time: int
+    completed_time: float
 
     def get_data(self) -> dict[str, Any]:
         return self.__dict__

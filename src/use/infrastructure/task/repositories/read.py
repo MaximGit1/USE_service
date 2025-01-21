@@ -12,11 +12,15 @@ from use.entities.task.models import Task, TaskCompleted
 from use.entities.task.value_objects import (
     TaskAnswer,
     TaskBody,
+    TaskCodeBody,
     TaskID,
     TaskTimeLimit,
 )
 from use.entities.user.value_objects import UserID
-from use.infrastructure.database.models import tasks_table
+from use.infrastructure.database.models import (
+    completed_tasks_table,
+    tasks_table,
+)
 
 
 class TaskReadRepository(TaskReadProtocol):
@@ -46,6 +50,15 @@ class TaskReadRepository(TaskReadProtocol):
 
         return self._load_tasks(result.all())
 
+    async def get_task_by_id(self, task_id: TaskID) -> Task | None:
+        stmt = select(tasks_table).where(tasks_table.c.id == task_id.value)
+        result = (await self._session.execute(stmt)).one_or_none()
+
+        if result is None:
+            return None
+
+        return self._load_task(result)
+
     @staticmethod
     def _load_task(row: Row[Any]) -> Task:
         return Task(
@@ -62,13 +75,23 @@ class TaskReadRepository(TaskReadProtocol):
     async def get_completed_task(
         self, task_id: TaskID, user_id: UserID
     ) -> TaskCompleted | None:
-        pass
-
-    async def get_task_by_id(self, task_id: TaskID) -> Task | None:
-        stmt = select(tasks_table).where(tasks_table.c.id == task_id.value)
+        stmt = select(completed_tasks_table).where(
+            completed_tasks_table.c.task_id == task_id.value,
+            completed_tasks_table.c.user_id == user_id.value,
+        )
         result = (await self._session.execute(stmt)).one_or_none()
 
         if result is None:
             return None
 
-        return self._load_task(result)
+        return self._load_completed_task(result)
+
+    @staticmethod
+    def _load_completed_task(row: Row[Any]) -> TaskCompleted:
+        return TaskCompleted(
+            id=TaskID(row.id),
+            task_id=TaskID(row.task_id),
+            user_id=UserID(row.user_id),
+            code=TaskCodeBody(row.code),
+            completed_time=row.completed_time,
+        )

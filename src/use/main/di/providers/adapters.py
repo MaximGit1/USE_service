@@ -19,6 +19,7 @@ from use.application.auth.protocols import JWTManageProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
+from use.application.task.protocols.update import TaskUpdateProtocol
 from use.application.user.protocols import (
     PasswordHasherProtocol,
     UserCreateProtocol,
@@ -31,6 +32,7 @@ from use.infrastructure.cookie.repositories import (
 )
 from use.infrastructure.task.repositories.add import TaskCreateRepository
 from use.infrastructure.task.repositories.read import TaskReadRepository
+from use.infrastructure.task.repositories.update import TaskUpdateRepository
 from use.infrastructure.user.repositories import (
     PasswordHasherRepository,
     UserCreateRepository,
@@ -121,6 +123,12 @@ def repository_provider() -> Provider:
         TaskReadRepository,
         scope=Scope.REQUEST,
         provides=TaskReadProtocol,
+    )
+
+    provider.provide(
+        TaskUpdateRepository,
+        scope=Scope.REQUEST,
+        provides=TaskUpdateProtocol,
     )
 
     return provider

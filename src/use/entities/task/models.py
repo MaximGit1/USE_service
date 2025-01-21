@@ -33,4 +33,4 @@ class TaskCompleted(Entity[TaskID]):
     task_id: TaskID
     user_id: UserID
     code: TaskCodeBody
-    completed_time: TaskTimeLimit
+    completed_time: float

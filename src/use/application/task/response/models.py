@@ -19,3 +19,12 @@ class TaskBodyResponse:
     body: str
     answer: str | None
     time_limit: int
+
+
+@dataclass
+class CompletedTaskBodyResponse:
+    id: int
+    task_id: int
+    user_id: int
+    code: str
+    completed_time: float

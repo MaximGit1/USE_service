@@ -33,7 +33,7 @@ class TaskCompletedCreateScheme(BaseModel):
     task_id: int
     user_id: int
     code: Annotated[str, MinLen(10), MaxLen(1_000)]
-    completed_time: Annotated[int, Ge(1), Lt(120)]
+    completed_time: float
 
     def get_response_model(self) -> TaskCompletedResponse:
         return TaskCompletedResponse(
