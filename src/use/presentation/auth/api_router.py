@@ -2,6 +2,7 @@ from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, Request, Response
 
 from use.application.auth.service import AuthService
+from use.application.broker_publisher import BrokerPublisherProtocol
 from use.application.cookie.service import CookieService
 from use.application.identityProvider.service import IdentityProvider
 from use.application.user.response.models import (
@@ -57,12 +58,15 @@ async def logout(
 
 @router.post("/verify-role/")
 async def verify_current_user_role(
-    role: RoleEnum,
     idp: FromDishka[IdentityProvider],
+    broker: FromDishka[BrokerPublisherProtocol],
     request: Request,
 ) -> bool:
     idp.update_service(request=request)
-    return await idp.verify_role(required_role=role)
+    current_id = idp.get_current_user_id()
+    return await broker.verify_user_role(
+        role=RoleEnum.ADMIN, user_id=current_id
+    )
 
 
 @router.post(
@@ -74,5 +78,4 @@ async def get_current_user_id(
     request: Request,
 ) -> UserIdResponse:
     idp.update_service(request=request)
-
     return UserIdResponse(user_id=idp.get_current_user_id())

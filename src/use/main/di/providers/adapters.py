@@ -8,6 +8,7 @@ from dishka import (
     Scope,
     provide,
 )
+from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -16,6 +17,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from use.application.auth.protocols import JWTManageProtocol
+from use.application.broker_publisher import BrokerPublisherProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
@@ -29,6 +31,10 @@ from use.application.user.protocols import (
 from use.infrastructure.auth.repositories import AccessManagerRepository
 from use.infrastructure.cookie.repositories import (
     CookieAccessManagerRepository,
+)
+from use.infrastructure.rabbit_publisher import (
+    RabbitUSEPublisher,
+    create_rabbit_broker,
 )
 from use.infrastructure.task.repositories.add import TaskCreateRepository
 from use.infrastructure.task.repositories.read import TaskReadRepository
@@ -131,6 +137,12 @@ def repository_provider() -> Provider:
         provides=TaskUpdateProtocol,
     )
 
+    provider.provide(
+        RabbitUSEPublisher,
+        scope=Scope.APP,
+        provides=BrokerPublisherProtocol,
+    )
+
     return provider
 
 
@@ -141,9 +153,19 @@ def config_provider() -> Provider:
     return provider
 
 
+def broker_provider() -> Provider:
+    provider = Provider()
+    provider.provide(
+        create_rabbit_broker, scope=Scope.APP, provides=RabbitBroker
+    )
+
+    return provider
+
+
 def get_adapters_providers() -> list[Provider]:
     return [
         DBProvider(),
         repository_provider(),
         config_provider(),
+        broker_provider(),
     ]

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
+from faststream.rabbit import RabbitBroker
 
 from use.main.di.main import container_factory
 from use.presentation.auth.api_router import router as auth_router
@@ -21,10 +22,10 @@ def init_routers(app: FastAPI) -> None:
         app.include_router(router)
 
 
-def init_di(app: FastAPI) -> None:
+def init_di(app_: FastAPI) -> None:
     container = container_factory()
 
-    setup_dishka(container, app)
+    setup_dishka(container, app_)
 
 
 def init_logger() -> logging.Logger:
@@ -53,19 +54,21 @@ def init_logger() -> logging.Logger:
 
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app_: FastAPI) -> AsyncGenerator[None, None]:
     logger = init_logger()
-
     logger.info("Application is starting...")
+
+    broker: RabbitBroker = await app_.state.dishka_container.get(RabbitBroker)
+    await broker.start()
 
     yield
 
+    await broker.close()
     logger.info("Application is stopping...")
 
 
 def create_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
-
     init_di(app)
     init_routers(app)
     init_exc_handlers(app)
