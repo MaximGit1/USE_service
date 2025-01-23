@@ -14,6 +14,7 @@ from use.application.task.exceptions import TaskNotFoundError
 from use.application.user.exceptions import (
     UserAlreadyExistsError,
     UserBannedError,
+    UserHasNotPermissionsError,
     UserInvalidCredentialsError,
     UserNotFoundError,
 )
@@ -77,4 +78,8 @@ def init_exc_handlers(app: "FastAPI") -> None:
     app.add_exception_handler(
         TaskNotFoundError,
         part(_validate, status=code.HTTP_404_NOT_FOUND),
+    )
+    app.add_exception_handler(
+        UserHasNotPermissionsError,
+        part(_validate, status=code.HTTP_403_FORBIDDEN),
     )

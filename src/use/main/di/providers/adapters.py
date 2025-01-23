@@ -17,7 +17,9 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from use.application.auth.protocols import JWTManageProtocol
-from use.application.broker_publisher import BrokerPublisherProtocol
+from use.application.broker_publisher.protocol import (
+    BrokerUSEPublisherProtocol,
+)
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
@@ -29,12 +31,9 @@ from use.application.user.protocols import (
     UserUpdateProtocol,
 )
 from use.infrastructure.auth.repositories import AccessManagerRepository
+from use.infrastructure.broker_publisher.repository import BrokerUSEPublisher
 from use.infrastructure.cookie.repositories import (
     CookieAccessManagerRepository,
-)
-from use.infrastructure.rabbit_publisher import (
-    RabbitUSEPublisher,
-    create_rabbit_broker,
 )
 from use.infrastructure.task.repositories.add import TaskCreateRepository
 from use.infrastructure.task.repositories.read import TaskReadRepository
@@ -138,12 +137,16 @@ def repository_provider() -> Provider:
     )
 
     provider.provide(
-        RabbitUSEPublisher,
+        BrokerUSEPublisher,
         scope=Scope.APP,
-        provides=BrokerPublisherProtocol,
+        provides=BrokerUSEPublisherProtocol,
     )
 
     return provider
+
+
+def create_rabbit_broker() -> RabbitBroker:
+    return RabbitBroker()
 
 
 def config_provider() -> Provider:

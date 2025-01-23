@@ -30,3 +30,8 @@ class UserInvalidCredentialsError(ApplicationError):
 class UserBannedError(ApplicationError):
     def __init__(self) -> None:
         super().__init__("User banned.")
+
+
+class UserHasNotPermissionsError(ApplicationError):
+    def __init__(self) -> None:
+        super().__init__("User has not permissions.")

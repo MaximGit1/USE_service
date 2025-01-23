@@ -7,7 +7,7 @@ from use.presentation.task.schemes import TaskCompletedCreateScheme
 router = RabbitRouter()
 
 
-@router.subscriber("save-task-result")
+@router.subscriber("save-completed-task")
 @inject
 async def save_ran_task(
     task: TaskCompletedCreateScheme, service: FromDishka[TaskService]

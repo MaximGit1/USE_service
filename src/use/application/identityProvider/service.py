@@ -46,3 +46,8 @@ class IdentityProvider(IdentityProviderProtocol):
 
     def update_service(self, request: Any = None) -> None:
         self._access.request = request
+
+    @staticmethod
+    def verify_user(*, status: bool) -> None:
+        if status:
+            raise CookieIsNoneError
