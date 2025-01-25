@@ -7,6 +7,7 @@ from faststream.rabbit import RabbitBroker
 
 from use.main.di.main import container_factory
 from use.presentation.auth.broker_router import router as auth_router
+from use.presentation.task.broker_router import router as task_router
 
 
 async def run_app(app_: FastStream) -> None:
@@ -18,6 +19,7 @@ if __name__ == "__main__":
     broker = RabbitBroker()
     app = FastStream(broker)
     broker.include_router(auth_router)
+    broker.include_router(task_router)
     container = container_factory()
     setup_dishka(app=app, container=container)
 

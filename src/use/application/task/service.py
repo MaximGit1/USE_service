@@ -87,13 +87,15 @@ class TaskService:
             time_limit=task.time_limit.value,
         )
 
-    async def get_task_by_id(self, task_id: int) -> TaskBodyResponse:
+    async def get_task_by_id(
+        self, task_id: int, *, with_answer: bool = False
+    ) -> TaskBodyResponse:
         task = await self._read.get_task_by_id(task_id=TaskID(task_id))
         if not task:
             raise TaskNotFoundError
 
         return self._convert_task_to_response_model(
-            task=task, with_answer=False
+            task=task, with_answer=with_answer
         )
 
     async def get_completed_task(

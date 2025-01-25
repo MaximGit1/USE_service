@@ -9,6 +9,7 @@ from dishka import (
     provide,
 )
 from faststream.rabbit import RabbitBroker
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -20,6 +21,7 @@ from use.application.auth.protocols import JWTManageProtocol
 from use.application.broker_publisher.protocol import (
     BrokerUSEPublisherProtocol,
 )
+from use.application.cache.protocol import CacheProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
@@ -32,6 +34,7 @@ from use.application.user.protocols import (
 )
 from use.infrastructure.auth.repositories import AccessManagerRepository
 from use.infrastructure.broker_publisher.repository import BrokerUSEPublisher
+from use.infrastructure.cache.repository import CacheRepository
 from use.infrastructure.cookie.repositories import (
     CookieAccessManagerRepository,
 )
@@ -135,6 +138,11 @@ def repository_provider() -> Provider:
         scope=Scope.REQUEST,
         provides=TaskUpdateProtocol,
     )
+    provider.provide(
+        CacheRepository,
+        scope=Scope.APP,
+        provides=CacheProtocol,
+    )
 
     provider.provide(
         BrokerUSEPublisher,
@@ -147,6 +155,10 @@ def repository_provider() -> Provider:
 
 def create_rabbit_broker() -> RabbitBroker:
     return RabbitBroker()
+
+
+def create_redis_client() -> Redis:
+    return Redis()
 
 
 def config_provider() -> Provider:
@@ -165,10 +177,18 @@ def broker_provider() -> Provider:
     return provider
 
 
+def cache_provider() -> Provider:
+    provider = Provider()
+    provider.provide(create_redis_client, scope=Scope.APP, provides=Redis)
+
+    return provider
+
+
 def get_adapters_providers() -> list[Provider]:
     return [
         DBProvider(),
         repository_provider(),
         config_provider(),
         broker_provider(),
+        cache_provider(),
     ]

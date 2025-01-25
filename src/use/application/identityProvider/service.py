@@ -49,5 +49,5 @@ class IdentityProvider(IdentityProviderProtocol):
 
     @staticmethod
     def verify_user(*, status: bool) -> None:
-        if status:
+        if not status:
             raise CookieIsNoneError

@@ -23,8 +23,14 @@ class TaskBodyResponse:
 
 @dataclass
 class CompletedTaskBodyResponse:
-    id: int
+    id: int | None
     task_id: int
     user_id: int
     code: str
+    completed_time: float
+
+
+@dataclass
+class TaskRunResponse:
+    res: bool
     completed_time: float

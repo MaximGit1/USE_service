@@ -38,3 +38,31 @@ class TaskRun:
     code: str
     time_limit: int
     answer: str
+
+
+@dataclass
+class TaskRunFullBodY(TaskRun):
+    user_id: int
+    task_id: int
+
+
+@dataclass
+class TaskRunRequest:
+    code: str
+    task_id: int
+
+
+@dataclass
+class TaskRunSubscriberRequest:
+    uuid: str
+    code: str
+    answer: str
+    time_limit: int
+
+
+@dataclass
+class TaskRunBrokerRequest:
+    uuid: str
+    code: str
+    answer: str
+    time_limit: int

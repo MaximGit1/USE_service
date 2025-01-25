@@ -10,7 +10,7 @@ from use.application.auth.exceptions import (
     TokenExpiredError,
 )
 from use.application.cookie.exceptions import CookieIsNoneError
-from use.application.task.exceptions import TaskNotFoundError
+from use.application.task.exceptions import TaskNotFoundError, TaskNotRunError
 from use.application.user.exceptions import (
     UserAlreadyExistsError,
     UserBannedError,
@@ -82,4 +82,8 @@ def init_exc_handlers(app: "FastAPI") -> None:
     app.add_exception_handler(
         UserHasNotPermissionsError,
         part(_validate, status=code.HTTP_403_FORBIDDEN),
+    )
+    app.add_exception_handler(
+        TaskNotRunError,
+        part(_validate, status=code.HTTP_404_NOT_FOUND),
     )

@@ -23,6 +23,7 @@ dishka = "^1.4.2"
 uvicorn = "^0.34.0"
 pyjwt = {extras = ["crypto"], version = "^2.9.0"}
 faststream = {extras = ["rabbit"], version = "^0.5.34"}
+redis = "^5.2.1"
 
 
 
@@ -71,7 +72,7 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999", "BLE001"]
+ignore = ["D", "S101", "COM812", "ISC001", "ANN401", "N999", "BLE001", "PLR0913"]
 
 [tool.ruff.format]
 docstring-code-format = true
