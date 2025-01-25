@@ -34,3 +34,12 @@ alembic -c conf/alembic.ini revision --autogenerate -m ""
 ```
 alembic -c conf/alembic.ini upgrade head
 ```
+
+### JWT
+
+```shell
+openssl genrsa -out certs/jwt-private.pem 2048
+```
+```shell
+openssl rsa -in certs/jwt-private.pem -outform PEM -pubout -out certs/jwt-public.pem
+```

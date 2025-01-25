@@ -142,6 +142,9 @@ class UserService:
         if user is None:
             raise UserNotFoundError(user_id=user_id)
 
+        if not user.is_active:
+            return False
+
         return RoleEnum.validate_role(
             user_role=user.role,
             min_role=required_role,
