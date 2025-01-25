@@ -7,6 +7,11 @@ ___
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pre-commit/pre-commit/main.svg)](https://results.pre-commit.ci/latest/github/pre-commit/pre-commit/main)
 
 Project on the fastapi framework.
+
+- This is a main service
+- [Run Task Service](https://github.com/MaximGit1/USE_run_serive)
+
+
 ___
 
 ## How to run
@@ -17,16 +22,7 @@ git clone https://github.com/MaximGit1/USE_service
 cd USE_service
 ```
 
-### Configure and run
-```
-cp .env.dist .env
-docker-compose up
-```
-___
-
-## Project information
-
-### Migrations
+### Create migrations
 
 ```
 alembic -c conf/alembic.ini revision --autogenerate -m ""
@@ -35,11 +31,22 @@ alembic -c conf/alembic.ini revision --autogenerate -m ""
 alembic -c conf/alembic.ini upgrade head
 ```
 
-### JWT
+### Manage JWT
 
-```shell
+```
 openssl genrsa -out certs/jwt-private.pem 2048
 ```
-```shell
+```
 openssl rsa -in certs/jwt-private.pem -outform PEM -pubout -out certs/jwt-public.pem
 ```
+
+
+### Configure and run
+```
+cp .env.dist .env
+docker-compose up
+```
+
+Start files:
+- src/use/run_api.py
+- src/use/run_broker.py
