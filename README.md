@@ -8,8 +8,10 @@ ___
 
 Project on the fastapi framework.
 
-- This is a main service
-- [Run Task Service](https://github.com/MaximGit1/USE_run_serive)
+## All components of the application
+- This is a main service (backend)
+- [Run Task Service (backend)](https://github.com/MaximGit1/USE_run_serive)
+- [Frontend](https://github.com/MaximGit1/USE_front)
 
 
 ___
