@@ -22,6 +22,9 @@ class CookieAccessManagerRepository(CookieManagerInteractor):
             value=value,
             httponly=True,
             max_age=self._max_age,
+            secure=True,
+            samesite="None",
+            path="/",
         )
 
     def delete(self) -> None:

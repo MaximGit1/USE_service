@@ -10,10 +10,10 @@ def init_middleware(app: FastAPI) -> None:
         add_middleware(TracingMiddleware),
         add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
+            allow_origins=["https://127.0.0.1:5173"],
+            allow_credentials=True,
             allow_methods=["GET", "POST", "PATCH"],
             allow_headers=["Content-Type"],
-            allow_credentials=True,
         ),
     ]
 

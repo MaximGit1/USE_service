@@ -170,6 +170,5 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 /database.db
-/certs/jwt-private.pem
-/certs/jwt-public.pem
+certs/
 /src/use/infrastructure/database/alembic/versions/

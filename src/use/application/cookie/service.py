@@ -27,3 +27,9 @@ class CookieService:
     ) -> None:
         self._access.request = request
         self._access.response = response
+
+    def verify_user_context(self) -> bool:
+        try:
+            return bool(self.get_access_token())
+        except CookieIsNoneError:
+            return False

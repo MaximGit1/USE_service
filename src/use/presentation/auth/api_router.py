@@ -79,3 +79,12 @@ async def get_current_user_id(
 ) -> UserIdResponse:
     idp.update_service(request=request)
     return UserIdResponse(user_id=idp.get_current_user_id())
+
+
+@router.post("/check/")
+async def verify_authenticated(
+    cookie_service: FromDishka[CookieService],
+    request: Request,
+) -> bool:
+    cookie_service.update_service(request=request)
+    return cookie_service.verify_user_context()
