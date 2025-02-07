@@ -21,3 +21,8 @@ class TaskReadProtocol(Protocol):
     async def get_completed_task(
         self, task_id: TaskID, user_id: UserID
     ) -> TaskCompleted | None: ...
+
+    @abstractmethod
+    async def get_all_completed_task_ids(
+        self, base_task_id: TaskID
+    ) -> list[TaskID]: ...

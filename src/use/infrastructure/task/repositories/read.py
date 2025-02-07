@@ -95,3 +95,12 @@ class TaskReadRepository(TaskReadProtocol):
             code=TaskCodeBody(row.code),
             completed_time=row.completed_time,
         )
+
+    async def get_all_completed_task_ids(
+        self, base_task_id: TaskID
+    ) -> list[TaskID]:
+        stmt = select(completed_tasks_table.c.id).where(
+            completed_tasks_table.c.task_id == base_task_id.value
+        )
+        result = await self._session.execute(stmt)
+        return [TaskID(row[0]) for row in result.fetchall()]

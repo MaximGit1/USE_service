@@ -24,8 +24,12 @@ from use.application.broker_publisher.protocol import (
 from use.application.cache.protocol import CacheProtocol
 from use.application.common.protocols.uow import UoWProtocol
 from use.application.cookie.interactor import CookieManagerInteractor
-from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
-from use.application.task.protocols.update import TaskUpdateProtocol
+from use.application.task.protocols import (
+    TaskCreateProtocol,
+    TaskDeleteProtocol,
+    TaskReadProtocol,
+    TaskUpdateProtocol,
+)
 from use.application.user.protocols import (
     PasswordHasherProtocol,
     UserCreateProtocol,
@@ -39,6 +43,7 @@ from use.infrastructure.cookie.repositories import (
     CookieAccessManagerRepository,
 )
 from use.infrastructure.task.repositories.add import TaskCreateRepository
+from use.infrastructure.task.repositories.deleted import TaskDeletedRepository
 from use.infrastructure.task.repositories.read import TaskReadRepository
 from use.infrastructure.task.repositories.update import TaskUpdateRepository
 from use.infrastructure.user.repositories import (
@@ -148,6 +153,12 @@ def repository_provider() -> Provider:
         BrokerUSEPublisher,
         scope=Scope.APP,
         provides=BrokerUSEPublisherProtocol,
+    )
+
+    provider.provide(
+        TaskDeletedRepository,
+        scope=Scope.REQUEST,
+        provides=TaskDeleteProtocol,
     )
 
     return provider

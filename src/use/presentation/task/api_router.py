@@ -128,3 +128,11 @@ async def send_to_run_task(
             )
         )
     return completed_task
+
+
+@router.delete("/{task_id}/", status_code=200)
+async def delete_task_data(
+    broker: FromDishka[BrokerPublisherService],
+    task_id: int,
+) -> None:
+    await broker.task_delete_all_data(task_id=task_id)

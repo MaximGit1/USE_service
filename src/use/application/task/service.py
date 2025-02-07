@@ -2,6 +2,7 @@ from use.application.common.protocols import UoWProtocol
 from use.application.common.request.models import PaginationParams
 from use.application.task.exceptions import TaskNotFoundError
 from use.application.task.protocols import TaskCreateProtocol, TaskReadProtocol
+from use.application.task.protocols.delete import TaskDeleteProtocol
 from use.application.task.protocols.update import TaskUpdateProtocol
 from use.application.task.request.models import (
     SearchFilters,
@@ -25,10 +26,12 @@ class TaskService:
         read: TaskReadProtocol,
         uow: UoWProtocol,
         update: TaskUpdateProtocol,
+        delete: TaskDeleteProtocol,
     ) -> None:
         self._add = add
         self._read = read
         self._update = update
+        self._delete = delete
         self._uow = uow
 
     async def create_task(self, task: TaskResponse) -> TaskIDResponse:
@@ -120,3 +123,14 @@ class TaskService:
             user_id=task.user_id.value,
             completed_time=task.completed_time,
         )
+
+    async def delete_base_task(self, task_id: int) -> None:
+        await self._delete.base_task(task_id=TaskID(task_id))
+        await self._uow.commit()
+
+    async def delete_all_completed_tasks(self, base_task_id: int) -> None:
+        for completed_task_id in await self._read.get_all_completed_task_ids(
+            TaskID(base_task_id)
+        ):
+            await self._delete.completed_task(completed_task_id)
+        await self._uow.commit()

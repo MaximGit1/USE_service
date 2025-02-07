@@ -41,3 +41,9 @@ class BrokerPublisherService:
             msg=data,
             queue="task-save-completed-task",
         )
+
+    async def task_delete_all_data(self, task_id: int) -> None:
+        await self._broker.publish(
+            msg=task_id,
+            queue="task-delete-task",
+        )
